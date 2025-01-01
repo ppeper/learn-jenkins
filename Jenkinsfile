@@ -16,6 +16,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    echo 'SCM polling Check'
                     ls -la
                     node --version
                     npm --version
@@ -91,4 +92,4 @@ pipeline {
             }
         }
     }
-}
+} 
