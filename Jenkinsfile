@@ -90,29 +90,29 @@ pipeline {
                     node_modules/.bin/netlify deploy --dir=build --prod
                 '''
             }
-
-            stage('Prod E2E') {
-                agent {
-                    docker {
-                        image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                        reuseNode true
-                    }
+        }
+        
+        stage('Prod E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
                 }
+            }
 
-                environment {
-                    CI_ENVIRONMENT_URL = 'https://euphonious-brioche-1e3cb6.netlify.app/'
-                }
+            environment {
+                CI_ENVIRONMENT_URL = 'https://euphonious-brioche-1e3cb6.netlify.app/'
+            }
 
-                steps {
-                    sh '''
-                        npx playwright test --reporter=html
-                    '''
-                }
+            steps {
+                sh '''
+                    npx playwright test --reporter=html
+                '''
+            }
 
-                post {
-                    always {
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright E2E', reportTitles: '', useWrapperFileDirectly: true])
-                    }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright E2E', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
         }
